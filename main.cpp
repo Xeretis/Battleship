@@ -184,7 +184,7 @@ void populateField(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE], const std::vec
                         goto switchEnd;
                     break;
                 case 3:
-                    if (placeShip(playingBoard, x, y, -(ships[i]), Axis::X, shipChar)) {
+                    if (placeShip(playingBoard, x, y, -(ships[i]), Axis::Y, shipChar)) {
                         valid = true;
                         attempts = 0;
                     } else
