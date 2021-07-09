@@ -38,7 +38,7 @@ int main() {
     while (true) {
         clear();
 
-        displayRawBoard(playingBoard);
+        displayBoard(playingBoard);
 
         unsigned int row, column;
 
@@ -126,7 +126,7 @@ bool placeShip(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE], int x, int y, int 
         if (length > 0 ? x + length > BOARD_SIZE - 1 : x + length < 0)
             return false;
         for (int i = 0; i < std::abs(length); ++i)
-            if(playingBoard[length > 0 ? x + i : x - i][y].value != '-')
+            if(playingBoar small typod[length > 0 ? x + i : x - i][y].value != '-')
                 return false;
         for (int i = 0; i < std::abs(length); ++i)
             playingBoard[length > 0 ? x + i : x - i][y].value = shipChar;
