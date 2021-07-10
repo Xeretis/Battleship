@@ -33,11 +33,21 @@ int main() {
 
     Field playingBoard[BOARD_SIZE][BOARD_SIZE];
 
-    populateField(playingBoard, {2, 3, 4, 6, 6, 6});
+    std::vector<int> ships;
+    int currentLength;
+
+    std::cin >> currentLength;
+
+    while (currentLength != -1) {
+        ships.emplace_back(currentLength);
+
+        std::cin >> currentLength;
+    }
+
+    populateField(playingBoard, ships);
 
     while (true) {
         clear();
-
         displayBoard(playingBoard);
 
         unsigned int row, column;
