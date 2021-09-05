@@ -52,7 +52,14 @@ int main() {
 
         unsigned int row, column;
 
-        std::cin >> row >> column;
+        std::cin >> row;
+
+        if (row == -1) {
+            displayRawBoard(playingBoard);
+            exit(0);
+        }
+
+        std::cin >> column;
 
         if (row - 1 >= BOARD_SIZE || column - 1 >= BOARD_SIZE  || row == 0 || column == 0) {
             std::cout << "Ervenytelen sor/oszlop!";
@@ -115,18 +122,16 @@ void clearBoard(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE]) {
 
 void displayBoard(const Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE]) {
     for (int i = 0; i < BOARD_SIZE; ++i) {
-        for (int j = 0; j < BOARD_SIZE; ++j) {
+        for (int j = 0; j < BOARD_SIZE; ++j)
             std::cout << (playingBoard[i][j].revealed ? getDisplayValue(playingBoard, playingBoard[i][j]) : 'X') << ' ';
-        }
         std::cout << std::endl;
     }
 }
 
 void displayRawBoard(const Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE]) {
     for (int i = 0; i < BOARD_SIZE; ++i) {
-        for (int j = 0; j < BOARD_SIZE; ++j) {
+        for (int j = 0; j < BOARD_SIZE; ++j)
             std::cout << playingBoard[i][j].value << ' ';
-        }
         std::cout << std::endl;
     }
 }
@@ -138,16 +143,16 @@ bool placeShip(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE], int x, int y, int 
         for (int i = 0; i < std::abs(length); ++i)
             if(playingBoard[length > 0 ? x + i : x - i][y].value != '-')
                 return false;
-        for (int i = 0; i < std::abs(length); ++i)
-            playingBoard[length > 0 ? x + i : x - i][y].value = shipChar;
+            for (int i = 0; i < std::abs(length); ++i)
+                playingBoard[length > 0 ? x + i : x - i][y].value = shipChar;
     } else {
         if (length > 0 ? y + length > BOARD_SIZE - 1 : y + length < 0)
             return false;
         for (int i = 0; i < std::abs(length); ++i)
             if(playingBoard[x][length > 0 ? y + i : y - i].value != '-')
                 return false;
-        for (int i = 0; i < std::abs(length); ++i)
-            playingBoard[x][length > 0 ? y + i : y - i].value = shipChar;
+            for (int i = 0; i < std::abs(length); ++i)
+                playingBoard[x][length > 0 ? y + i : y - i].value = shipChar;
     }
     return true;
 }
@@ -156,7 +161,7 @@ void populateField(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE], const std::vec
     std::random_device rd;
     std::default_random_engine engine(rd());
 
-    std::uniform_int_distribution<int> posDist (0, 8);
+    std::uniform_int_distribution<int> posDist (0, BOARD_SIZE - 1);
     std::uniform_int_distribution<int> dirDist (0, 3);
 
     for (int i = 0; i < ships.size(); ++i) {
@@ -176,32 +181,28 @@ void populateField(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE], const std::vec
                     if (placeShip(playingBoard, x, y, ships[i], Axis::X, shipChar)) {
                         valid = true;
                         attempts = 0;
-                    } else
-                        goto switchEnd;
+                    }
                     break;
                 case 1:
                     if (placeShip(playingBoard, x, y, -(ships[i]), Axis::X, shipChar)) {
                         valid = true;
                         attempts = 0;
-                    } else
-                        goto switchEnd;
+                    }
                     break;
                 case 2:
                     if (placeShip(playingBoard, x, y, ships[i], Axis::Y, shipChar)) {
                         valid = true;
                         attempts = 0;
-                    } else
-                        goto switchEnd;
+                    }
                     break;
                 case 3:
                     if (placeShip(playingBoard, x, y, -(ships[i]), Axis::Y, shipChar)) {
                         valid = true;
                         attempts = 0;
-                    } else
-                        goto switchEnd;
+                    }
                     break;
             }
-            switchEnd: attempts++;
+            attempts++;
 
             if (attempts >= MAX_ATTEMPTS) {
                 clearBoard(playingBoard);
@@ -218,5 +219,5 @@ bool checkWin(const Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE]) {
             if (!(playingBoard[i][j].value == '-' || playingBoard[i][j].revealed))
                 return false;
 
-    return true;
+            return true;
 }
