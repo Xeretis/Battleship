@@ -52,7 +52,14 @@ int main() {
 
         unsigned int row, column;
 
-        std::cin >> row >> column;
+        std::cin >> row;
+
+        if (row == -1) {
+            displayRawBoard(playingBoard);
+            exit(0);
+        }
+
+        std::cin >> column;
 
         if (row - 1 >= BOARD_SIZE || column - 1 >= BOARD_SIZE  || row == 0 || column == 0) {
             std::cout << "Ervenytelen sor/oszlop!";
