@@ -133,20 +133,20 @@ void displayRawBoard(const Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE]) {
 
 bool placeShip(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE], int x, int y, int length, Axis axis, char shipChar) {
     if (axis == Axis::X) {
-        if (length > 0 ? x + length > BOARD_SIZE - 1 : x + length < 0)
+        if (x + length > BOARD_SIZE - 1)
             return false;
-        for (int i = 0; i < std::abs(length); ++i)
+        for (int i = 0; i < length; ++i)
             if(playingBoard[length > 0 ? x + i : x - i][y].value != '-')
                 return false;
-        for (int i = 0; i < std::abs(length); ++i)
+        for (int i = 0; i < length; ++i)
             playingBoard[length > 0 ? x + i : x - i][y].value = shipChar;
     } else {
-        if (length > 0 ? y + length > BOARD_SIZE - 1 : y + length < 0)
+        if (y + length > BOARD_SIZE - 1)
             return false;
-        for (int i = 0; i < std::abs(length); ++i)
+        for (int i = 0; i < length; ++i)
             if(playingBoard[x][length > 0 ? y + i : y - i].value != '-')
                 return false;
-        for (int i = 0; i < std::abs(length); ++i)
+        for (int i = 0; i < length; ++i)
             playingBoard[x][length > 0 ? y + i : y - i].value = shipChar;
     }
     return true;
@@ -157,7 +157,7 @@ void populateField(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE], const std::vec
     std::default_random_engine engine(rd());
 
     std::uniform_int_distribution<int> posDist (0, 8);
-    std::uniform_int_distribution<int> dirDist (0, 3);
+    std::uniform_int_distribution<int> dirDist (0, 1);
 
     for (int i = 0; i < ships.size(); ++i) {
 
@@ -180,21 +180,7 @@ void populateField(Field (&playingBoard)[BOARD_SIZE][BOARD_SIZE], const std::vec
                         goto switchEnd;
                     break;
                 case 1:
-                    if (placeShip(playingBoard, x, y, -(ships[i]), Axis::X, shipChar)) {
-                        valid = true;
-                        attempts = 0;
-                    } else
-                        goto switchEnd;
-                    break;
-                case 2:
                     if (placeShip(playingBoard, x, y, ships[i], Axis::Y, shipChar)) {
-                        valid = true;
-                        attempts = 0;
-                    } else
-                        goto switchEnd;
-                    break;
-                case 3:
-                    if (placeShip(playingBoard, x, y, -(ships[i]), Axis::Y, shipChar)) {
                         valid = true;
                         attempts = 0;
                     } else
